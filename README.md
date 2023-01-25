@@ -1,10 +1,44 @@
+# Install
+
+Test computer and System:
+
+- Desktop setting: i9-12900KF, GPU 3090, CUDA 11.3
+- System setting: Ubuntu 20.04, ROS noetic (Python 3.8)
+- Test Date: 2023/1/26
+
+```bash
+mkdir -p ~/snap/point_labeler_ws/src
+cd ~/snap/point_labeler_ws/src
+git clone https://github.com/jbehley/point_labeler.git
+git clone https://github.com/ros/catkin.gi
+git clone https://github.com/jbehley/glow
+cd .. && catkin build point_labeler
+```
+
+# Usage
+
+After build successfully,
+
+```bash
+cd ~/snap/point_labeler_ws/src/point_labeler/bin
+./labeler
+```
+
+More Usage on our dataset
+TODO
+
+
+
+<details>
+  <summary>[Please check the official repo or below origin read for more detail]</summary>
+
 # Point Cloud Labeling Tool
 
  Tool for labeling of a single point clouds or a stream of point clouds. 
- 
+
 <img src="https://user-images.githubusercontent.com/11506664/63230808-340d5680-c212-11e9-8902-bc08f0f64dc8.png" width=500>
 
- Given the poses of a KITTI point cloud dataset, we load tiles of overlapping point clouds. Thus, multiple point clouds are labeled at once in a certain area. 
+Given the poses of a KITTI point cloud dataset, we load tiles of overlapping point clouds. Thus, multiple point clouds are labeled at once in a certain area. 
 
 ## Features
  - Support for KITTI Vision Benchmark Point Clouds.
@@ -21,9 +55,9 @@
 * QT >= 5.2
 * OpenGL Core Profile >= 4.0
 * [glow](https://github.com/jbehley/glow) (catkin package)
- 
+
 ## Build
-  
+
 On Ubuntu 16.04 and 18.04, most of the dependencies can be installed from the package manager:
 ```bash
 sudo apt install git libeigen3-dev libboost-all-dev qtbase5-dev libglew-dev catkin
@@ -85,7 +119,7 @@ add car points: true # add points at the origin of the sensor possibly caused by
 
 
 
- 
+
 ## Folder structure
 
 When loading a dataset, the data must be organized as follows:
@@ -99,7 +133,7 @@ point cloud folder
 └── poses.txt             -- file containing the poses of every scan.
 </pre>
 
- 
+
 
 ## Documentation
 
@@ -120,3 +154,4 @@ If you're using the tool in your research, it would be nice if you cite our [pap
 ```
 
 We used the tool to label SemanticKITTI, which contains overall over 40.000 scans organized in 20 sequences. 
+</details>
