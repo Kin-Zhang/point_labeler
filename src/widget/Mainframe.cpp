@@ -526,8 +526,9 @@ void Mainframe::open() {
   if (!retValue.isNull()) {
     QDir base_dir(retValue);
 
-    if (!base_dir.exists("velodyne") || !base_dir.exists("poses.txt")) {
-      std::cout << "[ERROR] velodyne or poses.txt missing." << std::endl;
+    //  || !base_dir.exists("poses.txt")
+    if (!base_dir.exists("pcd")) {
+      std::cout << "[ERROR] pcd folder is missing." << std::endl;
       return;
     }
 
@@ -931,70 +932,32 @@ void Mainframe::backward() {
   if (value == 0) ui.btnBackward->setEnabled(false);
 }
 void Mainframe::readConfig() {
-  std::ifstream in("settings.cfg");
+  std::string toml_file = QDir::currentPath().toStdString() + "/../assets/setting.toml";
+  toml::table config = toml::parse_file(toml_file);
+  std::cout << "<========= Config Setting =========>" << std::endl;
+  std::cout << "Reading config for UI from " << toml_file << std::endl;
 
-  if (!in.is_open()) return;
+  uint32_t numScans = read(config["data"]["max_scans"], 500);
+  ui.mViewportXYZ->setMaximumScans(numScans);
+  std::cout << "-- Setting 'max scans' to " << numScans << std::endl;
 
-  std::string line;
-  in.peek();
-  while (in.good() && !in.eof()) {
-    std::getline(in, line);
+  float tileSize = read(config["data"]["tile_size"], 100.0f);
+  reader_.setTileSize(tileSize);
+  std::cout << "-- Setting 'tile size' to " << tileSize << std::endl;
 
-    auto tokens = split(line, ":");
-    if (tokens[0] == "max scans") {
-      uint32_t numScans = boost::lexical_cast<uint32_t>(trim(tokens[1]));
-      ui.mViewportXYZ->setMaximumScans(numScans);
-      std::cout << "-- Setting 'max scans' to " << numScans << std::endl;
-    }
+  float range = read(config["data"]["max_range"], 80.0f);
+  ui.mViewportXYZ->setMaxRange(range);
+  reader_.setMaximumDistance(range);
+  std::cout << "-- Setting 'max range' to " << range << std::endl;
 
-    if (tokens[0] == "tile size") {
-      float tileSize = boost::lexical_cast<float>(trim(tokens[1]));
-      reader_.setTileSize(tileSize);
-      std::cout << "-- Setting 'tile size' to " << tileSize << std::endl;
-    }
+  float minRange = read(config["data"]["min_range"], 0.0f);
+  ui.mViewportXYZ->setMinRange(minRange);
+  std::cout << "-- Setting 'min range' to " << minRange << std::endl;
 
-    if (tokens[0] == "max range") {
-      float range = boost::lexical_cast<float>(trim(tokens[1]));
-      ui.mViewportXYZ->setMaxRange(range);
-      reader_.setMaximumDistance(range);
-      std::cout << "-- Setting 'max range' to " << range << std::endl;
-    }
-
-    if (tokens[0] == "min range") {
-      float range = boost::lexical_cast<float>(trim(tokens[1]));
-      ui.mViewportXYZ->setMinRange(range);
-      std::cout << "-- Setting 'min range' to " << range << std::endl;
-    }
-    if (tokens[0] == "flip mouse buttons") {
-      float value = boost::lexical_cast<float>(trim(tokens[1]));
-      ui.mViewportXYZ->setFlipMouseButtons((value == 0) ? false : true);
-      std::cout << "-- Setting 'flip mouse buttons' to " << ((value == 0) ? "false" : "true") << std::endl;
-    }
-
-    if (tokens[0] == "camera") {
-      std::string value = trim(tokens[1]);
-      auto cameras = ui.mViewportXYZ->getCameraNames();
-      bool found = false;
-      for (auto name : cameras) {
-        if (name == value) ui.mViewportXYZ->setCameraByName(name);
-      }
-      if (found) {
-        std::cout << "-- Setting 'camera' to " << value << std::endl;
-      } else {
-        std::cout << "-- [ERROR] Could not set 'camera' to " << value << ". Undefined camera. Using default."
-                  << std::endl;
-      }
-    }
-
-    if (tokens[0] == "add car points") {
-      std::string value = trim(tokens[1]);
-      if (value == "true" || value == "True" || value == "1") {
-        ui.chkAddCarPoints->setChecked(true);
-      }
-    }
-  }
-
-  in.close();
+  bool cars_pt = read(config["view"]["cars_pt"], false);
+  ui.chkAddCarPoints->setChecked(cars_pt);
+  std::cout << "-- Setting 'add car points' to " << cars_pt << std::endl;
+  std::cout << ">========= Config Setting =========<" << std::endl;
 }
 
 void Mainframe::initializeIcons() {

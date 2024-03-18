@@ -7,6 +7,7 @@
 #include <QtWidgets/QWidget>
 
 #include "KittiReader.h"
+#include "DynamicMapReader.h"
 
 
 /** \brief simple widget showing tiles corresponding to parts of the point cloud.
@@ -24,7 +25,7 @@ class TileSelectorWidget : public QWidget {
   virtual ~TileSelectorWidget() {}
 
   /** \brief initialize tile view with given tiles. **/
-  void initialize(const std::vector<KittiReader::Tile>& tiles, uint32_t numTilesX, uint32_t numTilesY);
+  void initialize(const std::vector<DMReader::Tile>& tiles, uint32_t numTilesX, uint32_t numTilesY);
 
   /** \brief select tile at (i,j) and emit signal. **/
   void select(uint32_t i, uint32_t j);

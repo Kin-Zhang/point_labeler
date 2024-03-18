@@ -99,3 +99,7 @@ install_manifest.txt
 
 build
 bin
+
+
+### Data ###
+data/*

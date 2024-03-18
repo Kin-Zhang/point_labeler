@@ -3,7 +3,8 @@
 
 TileSelectorWidget::TileSelectorWidget(QWidget* parent, Qt::WindowFlags f) {}
 
-void TileSelectorWidget::initialize(const std::vector<KittiReader::Tile>& tiles, uint32_t numTilesX,
+// FIXME: KittiReader::Tile / DMReader::Tile --> different mode
+void TileSelectorWidget::initialize(const std::vector<DMReader::Tile>& tiles, uint32_t numTilesX,
                                     uint32_t numTilesY) {
   tiles_.clear();
 

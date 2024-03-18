@@ -1,0 +1,9 @@
+[data]
+tile_size = 100.0
+max_scans = 500
+
+max_range = 80.0
+min_range = 0.0
+
+[view]
+cars_pt = true

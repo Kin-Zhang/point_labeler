@@ -1,33 +1,61 @@
-# Install
+DynamicMap Benchmark Labeler
+---
+
+This is a fork of the [point_labeler](https://github.com/jbehley/point_labeler) tool. I modified it to adapt to [our benchmark format](https://github.com/KTH-RPL/DynamicMap_Benchmark). 
+
+## Install
 
 Test computer and System:
 
-- Desktop setting: i9-12900KF, GPU 3090, CUDA 11.3
+- Desktop setting: i9-12900KF, (GPU 3090, CUDA 11.3 no need)
 - System setting: Ubuntu 20.04, ROS noetic (Python 3.8)
-- Test Date: 2023/1/26
+- Test Date: 2024/3/18
 
 ```bash
-mkdir -p ~/snap/point_labeler_ws/src
-cd ~/snap/point_labeler_ws/src
-git clone https://github.com/jbehley/point_labeler.git
-git clone https://github.com/ros/catkin.gi
-git clone https://github.com/jbehley/glow
-cd .. && catkin build point_labeler
+git clone https://github.com/Kin-Zhang/point_labeler.git
+cd point_labeler
+cmake -S . -B build
+cmake --build build
 ```
 
-# Usage
+## Usage
 
-After build successfully,
+After build successfully, you can run the labeler by (you **need** `cd` to the `bin` directory):
 
 ```bash
-cd ~/snap/point_labeler_ws/src/point_labeler/bin
+cd bin
 ./labeler
 ```
 
-More Usage on our dataset
-TODO
+Need [DynamicMap Benchmark format](https://github.com/KTH-RPL/DynamicMap_Benchmark) with `pcd`` folder and poses inside VIEWPOINTS meta on the pcd header.
+
+More Usage on our dataset (semindoor example here):
+![](assets/imgs/demo.png)
 
 
+## Acknowledgements
+
+This tool implementation is based on SemanticKITTI where we fork the repo, check their official README. Our work was partially supported by the Wallenberg AI, Autonomous Systems and Software Program ([WASP](https://wasp-sweden.org/)) funded by the Knut and Alice Wallenberg Foundation
+
+### Cite Our Paper
+
+Please cite our work if you find these useful for your research.
+```
+@inproceedings{zhang2023benchmark,
+  author={Zhang, Qingwen and Duberg, Daniel and Geng, Ruoyu and Jia, Mingkai and Wang, Lujia and Jensfelt, Patric},
+  booktitle={IEEE 26th International Conference on Intelligent Transportation Systems (ITSC)}, 
+  title={A Dynamic Points Removal Benchmark in Point Cloud Maps}, 
+  year={2023},
+  pages={608-614},
+  doi={10.1109/ITSC57777.2023.10422094}
+}
+@article{daniel2024dufomap,
+    author    = {Daniel, Duberg and Zhang, Qingwen and Jia, Mingkai and Jensfelt, Patric},
+    title     = {DUFOMap: Efficient Dynamic Awareness Mapping},
+    journal   = {arXiv preprint arXiv:2403.01449},
+    year      = {2024},
+}
+```
 
 <details>
   <summary>[Please check the official repo or below origin read for more detail]</summary>

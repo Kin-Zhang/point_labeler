@@ -307,7 +307,8 @@ void Viewport::setPoints(const std::vector<PointcloudPtr>& p, std::vector<Labels
 
     for (uint32_t t = 0; t < points_.size(); ++t) {
       prgFillTilePoints_.setUniform(GlUniform<float>("maxRange", maxRange_));
-      prgFillTilePoints_.setUniform(GlUniform<Eigen::Matrix4f>("pose", points_[t]->pose));
+      Eigen::Matrix4f eye_pose = Eigen::Matrix4f::Identity();
+      prgFillTilePoints_.setUniform(GlUniform<Eigen::Matrix4f>("pose", eye_pose));
 
       uint32_t num_points = points_[t]->size();
 

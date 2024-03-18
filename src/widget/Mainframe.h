@@ -8,6 +8,7 @@
 #include <future>
 #include "ImageViewer.h"
 #include "KittiReader.h"
+#include "DynamicMapReader.h"
 #include "LabelButton.h"
 #include "common.h"
 #include "data/geometry.h"
@@ -90,7 +91,9 @@ class Mainframe : public QMainWindow {
 
   Point3f midpoint;
 
-  KittiReader reader_;
+  // FIXME: selected mode in QT UI.
+  // KittiReader reader_;
+  DMReader reader_;
   std::future<void> readerFuture_;
   WaitingSpinnerWidget* spinner{nullptr};
 
@@ -111,5 +114,15 @@ class Mainframe : public QMainWindow {
   QTime mStartLabelTime_;
   QTimer mLabelTimer_;
 };
+
+#include "toml.hpp"
+// since C++17 we use, C++20 we can use std::remove_cvref_t
+template <typename T>
+using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
+
+template <typename T>
+remove_cvref_t<T> read(toml::node_view<toml::node> node, T&& default_value){
+    return node.value_or(std::forward<T>(default_value));
+}
 
 #endif /* MAINFRAME_H_ */

@@ -50,6 +50,7 @@ add_executable(labeler
   widget/CADCamera.h
   widget/CADCamera.cpp
   widget/KittiReader.cpp
+  widget/DynamicMapReader.cpp
   widget/TileSelectorWidget.cpp
   widget/waitingspinnerwidget.cpp
   widget/ImageViewer.cpp
